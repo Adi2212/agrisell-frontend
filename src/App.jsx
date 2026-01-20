@@ -8,6 +8,7 @@ import ThemeToggle from "./components/ThemeToggle";
 
 import Login from "./pages/Login";
 import Home from "./pages/Home";
+import Register from "./pages/Register";
 
 
 
@@ -18,6 +19,7 @@ export default function App() {
                     {/* ================= PUBLIC ROUTES ================= */}
                     <Route path="/" element={<Home />} />
                     <Route path="/login" element={<Login />} />
+                    <Route path="/register" element={<Register />} />
                 </Routes>
 
                 {/*GLOBAL THEME TOGGLE */}
