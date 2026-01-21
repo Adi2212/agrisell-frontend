@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import Navbar from "./Navbar";
 import Sidebar from "./Sidebar";
 import Footer from "./Footer";
@@ -7,38 +7,35 @@ export default function Layout({
   title,
   menuItems,
   children,
-  onLogout,
   showSearch = false,
   searchValue = "",
   onSearchChange = () => {},
-  cartIcon: CartIcon,
+  cartIcon,
   onCartClick = () => {},
 }) {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div className="flex min-h-screen bg-background">
+    <div className="min-h-screen bg-background">
       <Sidebar
-        menuItems={menuItems}
         title={title}
-        onLogout={onLogout}
+        menuItems={menuItems}
         isOpen={isOpen}
         setIsOpen={setIsOpen}
       />
 
-      <div className="flex flex-col flex-1">
+      <div className="lg:ml-64 flex flex-col min-h-screen">
         <Navbar
           title={title}
           toggleSidebar={() => setIsOpen(!isOpen)}
           showSearch={showSearch}
           searchValue={searchValue}
           onSearchChange={onSearchChange}
-          cartIcon={CartIcon}
+          cartIcon={cartIcon}
           onCartClick={onCartClick}
-           onProfileClick={() => navigate("/profile")}
         />
 
-        <main className="flex-1 p-4 lg:ml-64">{children}</main>
+        <main className="flex-1 p-4">{children}</main>
 
         <Footer />
       </div>

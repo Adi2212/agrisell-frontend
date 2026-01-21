@@ -24,53 +24,53 @@ export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  
+
   const handleSubmit = async (e) => {
-  e.preventDefault();
-  setLoading(true);
+    e.preventDefault();
+    setLoading(true);
 
-  try {
-    const res = await authApi.post("/login", { email, password });
-    const { token, user } = res.data;
+    try {
+      const res = await authApi.post("/login", { email, password });
+      const { token, user } = res.data;
 
-    //   Save auth
-    login(user, token);
+      //   Save auth
+      login(user, token);
 
-    toast.success(`Welcome back, ${user.name}!`);
+      toast.success(`Welcome back, ${user.name}!`);
 
-    //   ADMIN → dashboard
-    if (user.role === "ADMIN") {
-      navigate("/admin/dashboard");
-      return;
-    }
+      //   ADMIN → dashboard
+      if (user.role === "ADMIN") {
+        navigate("/admin/dashboard");
+        return;
+      }
 
-    //   BUYER / FARMER without address → address check
-    if (!user.address) {
-      navigate("/addAddress");
-      return;
-    }
+      //   BUYER / FARMER without address → address check
+      if (!user.address) {
+        navigate("/addAddress");
+        return;
+      }
 
-    //   BUYER with address
-    if (user.role === "BUYER") {
+      //   BUYER with address
+      if (user.role === "BUYER") {
+        navigate("/");
+        return;
+      }
+
+      //   FARMER with address
+      if (user.role === "FARMER") {
+        navigate("/farmer/dashboard");
+        return;
+      }
+
+      //   fallback
       navigate("/");
-      return;
+    } catch (err) {
+      console.error("Login failed:", err);
+      toast.error("Login failed. Please check your credentials.");
+    } finally {
+      setLoading(false);
     }
-
-    //   FARMER with address
-    if (user.role === "FARMER") {
-      navigate("/farmer/dashboard");
-      return;
-    }
-
-    //   fallback
-    navigate("/");
-  } catch (err) {
-    console.error("Login failed:", err);
-    toast.error("Login failed. Please check your credentials.");
-  } finally {
-    setLoading(false);
-  }
-};
+  };
 
 
   return (
@@ -95,27 +95,33 @@ export default function Login() {
               />
             </div>
 
-            <div className="relative">
+            <div>
               <Label>Password</Label>
-              <Input
-                type={showPassword ? "text" : "password"}
-                placeholder="••••••••"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-              />
-              <button
-                type="button"
-                className="absolute right-2 top-7 text-gray-500 hover:text-gray-700"
-                onClick={() => setShowPassword(!showPassword)}
-              >
-                {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-              </button>
+
+              <div className="relative mt-1">
+                <Input
+                  type={showPassword ? "text" : "password"}
+                  placeholder="••••••••"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="pr-10"
+                  required
+                />
+
+                <button
+                  type="button"
+                  className="absolute right-3 inset-y-0 flex items-center justify-center text-gray-500 hover:text-gray-700"
+                  onClick={() => setShowPassword(!showPassword)}
+                >
+                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                </button>
+              </div>
             </div>
+
 
             <Button
               type="submit"
-              className="w-full bg-primary hover:bg-primary/90 text-white"
+              className="w-full bg-primary hover:bg-primary/90 text-secondary"
               disabled={loading}
             >
               {loading ? "Logging in..." : "Login"}

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { authApi } from "@/api/api";
+
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
@@ -19,6 +20,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+
+import { Eye, EyeOff } from "lucide-react";
 import { toast } from "sonner";
 
 export default function Register() {
@@ -28,10 +31,13 @@ export default function Register() {
     name: "",
     email: "",
     password: "",
+    confirmPassword: "",
     phone: "",
-    role: "",
+    role: "buyer", // default
   });
 
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -42,8 +48,8 @@ export default function Register() {
     e.preventDefault();
     setError("");
 
-    if (!form.role) {
-      setError("Please select a role");
+    if (form.password !== form.confirmPassword) {
+      setError("Passwords do not match");
       return;
     }
 
@@ -63,14 +69,11 @@ export default function Register() {
           ? "/register/farmer"
           : "/register/buyer";
 
-      const res = await authApi.post(endpoint, payload);
-      console.log(res.data);
+      await authApi.post(endpoint, payload);
 
-      
       toast.success("Registration successful!");
       navigate("/login");
     } catch (err) {
-      console.error("Registration error:", err);
       const msg =
         err.response?.data?.message ||
         err.response?.data?.error ||
@@ -92,14 +95,15 @@ export default function Register() {
 
         <CardContent>
           {error && (
-            <Alert variant="destructive" className="mb-3">
+            <Alert variant="destructive" className="mb-4">
               <AlertTitle>Error</AlertTitle>
               <AlertDescription>{error}</AlertDescription>
             </Alert>
           )}
 
           <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
+            {/* Name */}
+            <div className="space-y-1">
               <Label>Full Name</Label>
               <Input
                 name="name"
@@ -110,7 +114,8 @@ export default function Register() {
               />
             </div>
 
-            <div>
+            {/* Email */}
+            <div className="space-y-1">
               <Label>Email</Label>
               <Input
                 type="email"
@@ -122,41 +127,84 @@ export default function Register() {
               />
             </div>
 
-            <div>
+            {/* Password */}
+            <div className="space-y-1">
               <Label>Password</Label>
-              <Input
-                type="password"
-                name="password"
-                value={form.password}
-                onChange={handleChange}
-                placeholder="••••••••"
-                required
-              />
+              <div className="relative">
+                <Input
+                  type={showPassword ? "text" : "password"}
+                  name="password"
+                  value={form.password}
+                  onChange={handleChange}
+                  placeholder="••••••••"
+                  className="pr-10"
+                  required
+                />
+                <button
+                  type="button"
+                  className="absolute right-3 inset-y-0 flex items-center text-muted-foreground hover:text-primary"
+                  onClick={() => setShowPassword(!showPassword)}
+                >
+                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                </button>
+              </div>
             </div>
 
-            <div>
+            {/* Confirm Password */}
+            <div className="space-y-1">
+              <Label>Confirm Password</Label>
+              <div className="relative">
+                <Input
+                  type={showConfirmPassword ? "text" : "password"}
+                  name="confirmPassword"
+                  value={form.confirmPassword}
+                  onChange={handleChange}
+                  placeholder="••••••••"
+                  className="pr-10"
+                  required
+                />
+                <button
+                  type="button"
+                  className="absolute right-3 inset-y-0 flex items-center text-muted-foreground hover:text-primary"
+                  onClick={() =>
+                    setShowConfirmPassword(!showConfirmPassword)
+                  }
+                >
+                  {showConfirmPassword ? (
+                    <EyeOff size={18} />
+                  ) : (
+                    <Eye size={18} />
+                  )}
+                </button>
+              </div>
+            </div>
+
+            {/* Phone */}
+            <div className="space-y-1">
               <Label>Phone</Label>
               <Input
                 name="phone"
                 value={form.phone}
                 onChange={handleChange}
-                placeholder="Enter your phone number"
+                placeholder="Enter phone number"
               />
             </div>
 
-            <div>
+            {/* Role */}
+            <div className="space-y-1">
               <Label>Role</Label>
               <Select
+                value={form.role}
                 onValueChange={(value) =>
                   setForm({ ...form, role: value })
                 }
               >
                 <SelectTrigger>
-                  <SelectValue placeholder="Select role" />
+                  <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="farmer">Farmer</SelectItem>
                   <SelectItem value="buyer">Buyer</SelectItem>
+                  <SelectItem value="farmer">Farmer</SelectItem>
                 </SelectContent>
               </Select>
             </div>

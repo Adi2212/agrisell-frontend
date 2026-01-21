@@ -8,80 +8,76 @@ export default function Navbar({
   showSearch = false,
   searchValue = "",
   onSearchChange,
+  cartIcon: CartIcon,
   onCartClick,
-  cartIcon: CartIcon
 }) {
   const navigate = useNavigate();
 
   const isLoggedIn = !!sessionStorage.getItem("token");
-
   const user = sessionStorage.getItem("user")
     ? JSON.parse(sessionStorage.getItem("user"))
     : null;
 
-  const profileUrl = user?.profileUrl;
-
   return (
-    <header className="bg-background shadow-sm sticky top-0 z-30 flex items-center justify-between px-4 py-4 border-b">
-
+    <header className="h-16 bg-background border-b sticky top-0 z-30 flex items-center px-4">
+      
       {/* LEFT */}
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-3 w-1/4">
         <button className="lg:hidden" onClick={toggleSidebar}>
-          <Menu className="text-gray-700" size={22} />
+          <Menu size={22} />
         </button>
-        <h1 className="text-xl font-semibold text-foreground">{title}</h1>
+        {/* <h1 className="text-lg font-semibold">{title}</h1> */}
       </div>
 
       {/* CENTER */}
-      {showSearch && (
-        <div className="flex items-center gap-3 w-1/2">
-          <div className="relative w-full">
+      <div className="flex-1 flex justify-center">
+        {showSearch && (
+          <div className="relative w-full max-w-md">
             <Search
-              className="absolute left-3 top-3 text-muted-foreground"
+              className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"
               size={18}
             />
             <Input
-              type="text"
               placeholder="Search..."
               value={searchValue}
               onChange={(e) => onSearchChange(e.target.value)}
               className="pl-10 rounded-full"
             />
           </div>
-
-          {CartIcon && (
-            <button
-              onClick={onCartClick}
-              className="bg-background text-foreground px-3 py-2 rounded-full hover:bg-secondary/10 transition"
-            >
-              <CartIcon size={18} />
-            </button>
-          )}
-        </div>
-      )}
+        )}
+      </div>
 
       {/* RIGHT */}
-      <div className="flex items-center gap-3">
+      <div className="flex items-center justify-end gap-3 w-1/4">
+        {CartIcon && (
+          <button
+            onClick={onCartClick}
+            className="p-2 rounded-full hover:bg-secondary/10 transition"
+          >
+            <CartIcon size={18} />
+          </button>
+        )}
+
         {!isLoggedIn ? (
           <Link
             to="/login"
-            className="px-4 py-2 text-sm font-medium border rounded-full hover:bg-secondary/10 transition"
+            className="px-4 py-2 text-sm border rounded-full hover:bg-secondary/10"
           >
             Login
           </Link>
         ) : (
           <button
             onClick={() => navigate("/account")}
-            className="w-9 h-9 rounded-full overflow-hidden border hover:ring-2 hover:ring-primary transition flex items-center justify-center bg-muted"
+            className="w-9 h-9 rounded-full overflow-hidden border flex items-center justify-center bg-muted hover:ring-2 hover:ring-primary"
           >
-            {profileUrl ? (
+            {user?.profileUrl ? (
               <img
-                src={profileUrl}
+                src={user.profileUrl}
                 alt="Profile"
                 className="w-full h-full object-cover"
-                onError={(e) => {
-                  e.currentTarget.src = "/default-avatar.png";
-                }}
+                onError={(e) =>
+                  (e.currentTarget.src = "/default-avatar.png")
+                }
               />
             ) : (
               <User size={18} />

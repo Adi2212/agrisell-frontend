@@ -1,0 +1,89 @@
+import Layout from "../../components/Layout";
+import { farmerMenu } from "@/constants/menus";
+import { useNavigate } from "react-router-dom";
+import { BarChart3, Package, ShoppingCart, PlusCircle } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+
+export default function FarmerDashboard() {
+  const navigate = useNavigate();
+
+  const stats = [
+    { label: "Total Products", value: 8, icon: Package },
+    { label: "Pending Orders", value: 3, icon: ShoppingCart },
+    { label: "Completed Orders", value: 14, icon: BarChart3 },
+  ];
+
+  return (
+    <Layout
+      title="Farmer Dashboard"
+      menuItems={farmerMenu}
+      onLogout={() => {
+        sessionStorage.clear();
+        navigate("/");
+      }}
+    >
+      <div className="p-4 space-y-6">
+        {/* Greeting */}
+        <h2 className="text-2xl font-semibold text-primary">
+          👨‍🌾 Welcome, Farmer!
+        </h2>
+        <p className="text-primary text-sm">
+          Manage your products and orders efficiently 🥕🥦🍅
+        </p>
+
+        {/* Stats */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-4">
+          {stats.map((item, index) => (
+            <Card key={index} className="shadow-sm hover:shadow-md transition">
+              <CardHeader className="flex flex-row items-center justify-between pb-2">
+                <CardTitle className="text-sm font-medium">
+                  {item.label}
+                </CardTitle>
+                <item.icon className="h-5 w-5 text-primary" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">{item.value}</div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+
+        {/* Quick Actions */}
+        <Card className="mt-6 p-4 shadow-sm border">
+          <h3 className="text-lg font-semibold text-primary mb-3">
+            Quick Actions
+          </h3>
+          <div className="flex flex-wrap gap-4">
+            <Button
+              variant="outline"
+              className="bg-primary text-white hover:bg-secondary/90  hover:border-primary"
+              onClick={() => navigate("/farmer/add-product")}
+            >
+              <PlusCircle className="mr-2" size={18} />
+              Add Product
+            </Button>
+
+            <Button
+              variant="outline"
+               className="bg-primary text-white hover:bg-secondary/90  hover:border-primary"
+              onClick={() => navigate("/farmer/products")}
+            >
+              <Package className="mr-2" size={18} />
+              My Products
+            </Button>
+
+            <Button
+               variant="outline"
+               className="bg-primary text-white hover:bg-secondary/90  hover:border-primary"
+              onClick={() => navigate("/farmer/orders")}
+            >
+              <ShoppingCart className="mr-2" size={18} />
+              View Orders
+            </Button>
+          </div>
+        </Card>
+      </div>
+    </Layout>
+  );
+}
