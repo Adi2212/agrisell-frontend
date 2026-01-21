@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardContent, CardTitle } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { toast } from "sonner";
 
 export default function AddAddress() {
   const navigate = useNavigate();
@@ -37,15 +38,15 @@ export default function AddAddress() {
         return;
       }
 
-      // ✅ call backend (Spring Boot API)
+      //call backend (Spring Boot API)
       const res = await userApi.put(`/user/address`, form,{
         headers: { Authorization: `Bearer ${token}` },
       });
 
-      // ✅ update sessionStorage user (optional)
+      //update sessionStorage user (optional)
       sessionStorage.setItem("user", JSON.stringify(res.data));
 
-      alert("Address added successfully!");
+      toast.success("Address added successfully");
       if(user.role === "FARMER") navigate("/farmer/dashboard");
       else
       navigate("/");
