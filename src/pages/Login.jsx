@@ -1,4 +1,4 @@
-import { Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff, ArrowLeft } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
@@ -16,14 +16,13 @@ import {
 import { toast } from "sonner";
 
 export default function Login() {
-  const { login } = useAuth(); //   use custom hook
+  const { login } = useAuth();
   const navigate = useNavigate();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
-
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -33,48 +32,34 @@ export default function Login() {
       const res = await authApi.post("/login", { email, password });
       const { token, user } = res.data;
 
-      //   Save auth
       login(user, token);
-
       toast.success(`Welcome back, ${user.name}!`);
 
-      //   ADMIN → dashboard
-      if (user.role === "ADMIN") {
-        navigate("/admin/dashboard");
-        return;
-      }
+      if (user.role === "ADMIN") return navigate("/admin/dashboard");
+      if (!user.address) return navigate("/addAddress");
+      if (user.role === "BUYER") return navigate("/");
+      if (user.role === "FARMER") return navigate("/farmer/dashboard");
 
-      //   BUYER / FARMER without address → address check
-      if (!user.address) {
-        navigate("/addAddress");
-        return;
-      }
-
-      //   BUYER with address
-      if (user.role === "BUYER") {
-        navigate("/");
-        return;
-      }
-
-      //   FARMER with address
-      if (user.role === "FARMER") {
-        navigate("/farmer/dashboard");
-        return;
-      }
-
-      //   fallback
       navigate("/");
     } catch (err) {
-      console.error("Login failed:", err);
       toast.error("Login failed. Please check your credentials.");
     } finally {
       setLoading(false);
     }
   };
 
-
   return (
     <div className="relative flex items-center justify-center min-h-screen bg-background p-4">
+
+      {/* 🔙 Back to Home */}
+      <button
+        onClick={() => navigate("/")}
+        className="absolute top-6 left-6 flex items-center gap-2 text-muted-foreground hover:text-primary transition"
+      >
+        <ArrowLeft size={20} />
+        <span className="hidden sm:inline text-sm">Back</span>
+      </button>
+
       <Card className="w-full max-w-md shadow-xl border border-muted-foreground/10">
         <CardHeader>
           <CardTitle className="text-2xl font-semibold text-center text-primary">
@@ -84,7 +69,7 @@ export default function Login() {
 
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-5">
-            <div>
+            <div className="space-y-1">
               <Label>Email</Label>
               <Input
                 type="email"
@@ -95,10 +80,9 @@ export default function Login() {
               />
             </div>
 
-            <div>
+            <div className="space-y-1">
               <Label>Password</Label>
-
-              <div className="relative mt-1">
+              <div className="relative">
                 <Input
                   type={showPassword ? "text" : "password"}
                   placeholder="••••••••"
@@ -107,17 +91,15 @@ export default function Login() {
                   className="pr-10"
                   required
                 />
-
                 <button
                   type="button"
-                  className="absolute right-3 inset-y-0 flex items-center justify-center text-gray-500 hover:text-gray-700"
+                  className="absolute right-3 inset-y-0 flex items-center text-gray-500 hover:text-gray-700"
                   onClick={() => setShowPassword(!showPassword)}
                 >
                   {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                 </button>
               </div>
             </div>
-
 
             <Button
               type="submit"
@@ -140,7 +122,7 @@ export default function Login() {
         </CardFooter>
       </Card>
 
-      {/* Admin Login Button */}
+      {/* Admin Login */}
       <Button
         onClick={() => navigate("/admin/login")}
         variant="outline"

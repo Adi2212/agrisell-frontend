@@ -1,5 +1,5 @@
 import { useNavigate, useLocation } from "react-router-dom";
-import logo from "../assets/logo.png";
+import logo from "@/assets/logo.png";
 
 export default function Sidebar({ menuItems, title, isOpen, setIsOpen }) {
   const navigate = useNavigate();
