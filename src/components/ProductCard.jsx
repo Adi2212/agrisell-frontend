@@ -1,47 +1,64 @@
-import { useContext } from "react";
-import { CartContext } from "@/context/CartContext";
 import { Heart, ShoppingBag } from "lucide-react";
-
-
 
 export default function ProductCard({ product, onClick, onAddToCart }) {
   return (
     <div
       onClick={() => onClick && onClick()}
-      className="cursor-pointer rounded-3xl overflow-hidden
-             shadow-lg hover:shadow-2xl
-             transition-all duration-300
-             hover:-translate-y-2"
+      className="
+        cursor-pointer rounded-3xl overflow-hidden
+        bg-card text-foreground
+        shadow-md hover:shadow-xl
+        transition-all duration-300
+        hover:-translate-y-2
+      "
     >
+      {/* IMAGE SECTION */}
+      <div className="relative h-52 flex items-center justify-center bg-muted">
+        <img
+          src={product.imageUrl}
+          alt={product.name}
+          className="h-40 object-contain"
+        />
 
-      {/* Image */}
-      <div className="relative  p-4 h-52 flex items-center justify-center">
-        <img src={product.imageUrl} alt={product.name} className="h-40 object-contain" />
-
+        {/* Wishlist */}
         <button
-          className="absolute top-3 right-3 bg-secondary p-2 rounded-full"
-          onClick={(e) => e.stopPropagation()}  // prevents opening page
+          onClick={(e) => e.stopPropagation()}
+          className="
+            absolute top-3 right-3
+            bg-background/80 backdrop-blur
+            p-2 rounded-full
+            hover:scale-110 transition
+          "
         >
           <Heart className="w-4 h-4 text-muted-foreground" />
         </button>
       </div>
 
-      {/* Info */}
-      <div className="bg-secondary text-foreground p-4 rounded-t-3xl">
-        <h3 className="font-semibold p-2 text-lg">{product.name}</h3>
-        <p className="text-sm text-muted-foreground">{product.category?.name}</p>
+      {/* INFO SECTION */}
+      <div className="p-5">
+        <h3 className="font-semibold text-lg">{product.name}</h3>
+
+        <p className="text-sm text-muted-foreground">
+          {product.category?.name}
+        </p>
 
         <div className="flex justify-between items-center mt-4">
-          <span className="text-2xl font-bold">₹{product.price}</span>
+          <span className="text-2xl font-bold">
+            ₹{product.price}
+          </span>
 
           <button
             onClick={(e) => {
               e.stopPropagation();
               onAddToCart(product);
             }}
-            className="bg-secondary p-2 rounded-2xl"
+            className="
+              bg-primary text-primary-foreground
+              p-3 rounded-2xl
+              transition active:scale-95
+            "
           >
-            <ShoppingBag className="w-5 h-5 text-foreground" />
+            <ShoppingBag className="w-5 h-5" />
           </button>
         </div>
       </div>

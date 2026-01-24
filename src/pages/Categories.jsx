@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import Layout from "@/components/Layout";
 import { buyerMenu } from "@/constants/menus";
 import { categoryApi } from "@/api/api";
+
 import {
   Card,
   CardContent,
@@ -13,10 +14,11 @@ export default function Categories() {
   const [mainCategories, setMainCategories] = useState([]);
   const [subCategories, setSubCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(null);
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  // 🔹 Load MAIN categories
+  // Load MAIN categories
   useEffect(() => {
     const fetchMainCategories = async () => {
       try {
@@ -34,7 +36,7 @@ export default function Categories() {
     fetchMainCategories();
   }, []);
 
-  // 🔹 Load SUB categories
+  // Load SUB categories
   const handleCategoryClick = async (category) => {
     try {
       setSelectedCategory(category);
@@ -55,7 +57,7 @@ export default function Categories() {
     <Layout title="Categories" menuItems={buyerMenu}>
       <main className="p-6 max-w-6xl mx-auto space-y-10">
 
-        {/* ERROR */}
+        {/* Error */}
         {error && (
           <div className="text-center text-red-600 font-medium">
             {error}
@@ -85,15 +87,17 @@ export default function Categories() {
                     }`}
                 >
                   <CardHeader className="flex flex-col items-center">
-                    {cat.imageUrl ? (
+                    {/* Show category image */}
+                    {cat.imgUrl ? (
                       <img
-                        src={cat.imageUrl}
+                        src={cat.imgUrl}
                         alt={cat.name}
                         className="h-16 w-16 object-contain"
                       />
                     ) : (
                       <div className="h-16 w-16 bg-secondary rounded-full" />
                     )}
+
                     <CardTitle className="mt-2 text-base">
                       {cat.name}
                     </CardTitle>
@@ -112,7 +116,9 @@ export default function Categories() {
             </h2>
 
             {loading ? (
-              <p className="text-muted-foreground">Loading sub categories...</p>
+              <p className="text-muted-foreground">
+                Loading sub categories...
+              </p>
             ) : (
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">
                 {subCategories.map((sub) => (
@@ -121,13 +127,18 @@ export default function Categories() {
                     className="cursor-pointer hover:bg-secondary/10 transition"
                   >
                     <CardContent className="p-6 flex flex-col items-center gap-2 font-medium">
-                      {sub.imageUrl && (
+
+                      {/* Show subcategory image */}
+                      {sub.imgUrl ? (
                         <img
-                          src={sub.imageUrl}
+                          src={sub.imgUrl}
                           alt={sub.name}
                           className="h-12 w-12 object-contain"
                         />
+                      ) : (
+                        <div className="h-12 w-12 bg-muted rounded-full" />
                       )}
+
                       {sub.name}
                     </CardContent>
                   </Card>
@@ -136,7 +147,6 @@ export default function Categories() {
             )}
           </section>
         )}
-
       </main>
     </Layout>
   );

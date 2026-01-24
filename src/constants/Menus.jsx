@@ -11,7 +11,7 @@ export const adminMenu = [
     { label: "Manage Farmers", icon: Users, route: "/admin/farmers" },
     { label: "Manage Buyers", icon: Users, route: "/admin/buyers" },
     { label: "Products", icon: Package, route: "/admin/products" },
-    { label: "Add Category", icon: Tag, route: "/admin/add-category" },
+    { label: "Categories", icon: Tag, route: "/admin/categories" },
     { label: "Orders", icon: ShoppingCart, route: "/admin/orders" },
 ];
 

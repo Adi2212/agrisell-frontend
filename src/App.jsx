@@ -8,14 +8,15 @@ import Login from "./pages/Login";
 import Home from "./pages/Home";
 import Register from "./pages/Register";
 import Categories from "./pages/Categories";
+import AccountDetails from "./pages/AccountDetails";
 
 import AdminLogin from "./pages/admin/AdminLogin";
 import AdminDashboard from "./pages/admin/AdminDashboard";
+import CategoryPage from "./pages/admin/CategoryPage";
 
 import FarmerDashboard from "./pages/farmer/FarmerDashboard";
 
 import AddAddress from "./pages/AddAddress";
-
 
 
 export default function App() {
@@ -40,6 +41,15 @@ export default function App() {
                     }
                 />
 
+                <Route
+                    path="/admin/categories"
+                    element={
+                        <ProtectedRoute role="ADMIN">
+                            <CategoryPage />
+                        </ProtectedRoute>
+                    }
+                />
+
                 {/* ================= FARMER ROUTES ================= */}
                 <Route
                     path="/farmer/dashboard"
@@ -60,6 +70,14 @@ export default function App() {
                     }
                 />
 
+                <Route
+                    path="/account"
+                    element={
+                        <ProtectedRoute>
+                            <AccountDetails />
+                        </ProtectedRoute>
+                    }
+                />
 
             </Routes>
 

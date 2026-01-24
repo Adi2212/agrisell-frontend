@@ -22,9 +22,12 @@ export const categoryApi = axios.create({
   baseURL: "http://localhost:9090/categories",
 });
 
-// Automatically attach JWT token to all requests made with productApi,userApi,categoryApi
-const apis = [productApi, userApi, categoryApi];
+export const imagekitApi = axios.create({
+  baseURL: "http://localhost:9090/imagekit",
+});
 
+// Automatically attach JWT token to all requests made with productApi,userApi,categoryApi,imagekitApi
+const apis = [productApi, userApi, categoryApi, imagekitApi];
 apis.forEach((api) => {
   api.interceptors.request.use((config) => {
     const token = sessionStorage.getItem("token");

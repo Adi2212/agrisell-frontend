@@ -7,12 +7,12 @@ import { CartProvider } from './context/CartContext.jsx';
 import { Toaster } from "sonner";
 
 createRoot(document.getElementById('root')).render(
-  <StrictMode>
+  
      <BrowserRouter>
     <CartProvider>
     <App />
     <Toaster richColors closeButton position="top-right" />
   </CartProvider>
     </BrowserRouter>
-  </StrictMode>,
+  
 )
