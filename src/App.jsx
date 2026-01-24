@@ -9,6 +9,7 @@ import Home from "./pages/Home";
 import Register from "./pages/Register";
 import Categories from "./pages/Categories";
 import AccountDetails from "./pages/AccountDetails";
+import EditAccount from "./pages/EditAccount";
 
 import AdminLogin from "./pages/admin/AdminLogin";
 import AdminDashboard from "./pages/admin/AdminDashboard";
@@ -17,6 +18,7 @@ import CategoryPage from "./pages/admin/CategoryPage";
 import FarmerDashboard from "./pages/farmer/FarmerDashboard";
 
 import AddAddress from "./pages/AddAddress";
+
 
 
 export default function App() {
@@ -75,6 +77,15 @@ export default function App() {
                     element={
                         <ProtectedRoute>
                             <AccountDetails />
+                        </ProtectedRoute>
+                    }
+                />
+
+                <Route
+                    path="/account/edit"
+                    element={
+                        <ProtectedRoute>
+                            <EditAccount />
                         </ProtectedRoute>
                     }
                 />

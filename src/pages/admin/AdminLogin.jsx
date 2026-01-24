@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Eye, EyeOff, ShieldCheck } from "lucide-react";
 import { authApi } from "@/api/api";
 import { useAuth } from "@/context/AuthContext";
+import { toast } from "sonner";
 
 export default function AdminLogin() {
     const navigate = useNavigate();
@@ -28,7 +29,7 @@ export default function AdminLogin() {
 
 
             if (user.role !== "ADMIN") {
-                alert("Access denied! This account is not an admin.");
+                toast.error("Access denied! This account is not an admin.");
                 setLoading(false);
                 return;
             }
@@ -36,10 +37,11 @@ export default function AdminLogin() {
             sessionStorage.setItem("token", token);
             sessionStorage.setItem("user", JSON.stringify(user));
 
+            toast.success("Admin login successful! welcome back "+user.name);
             navigate("/admin/dashboard");
         } catch (err) {
             console.error("Admin login failed:", err);
-            alert("Invalid admin credentials!");
+           toast.error("Invalid admin credentials!");
         } finally {
             setLoading(false);
         }

@@ -15,6 +15,7 @@ export const AuthProvider = ({ children }) => {
   const login = (userData, jwtToken) => {
     setUser(userData);
     setToken(jwtToken);
+
     sessionStorage.setItem("user", JSON.stringify(userData));
     sessionStorage.setItem("token", jwtToken);
   };
@@ -22,18 +23,22 @@ export const AuthProvider = ({ children }) => {
   const logout = () => {
     setUser(null);
     setToken("");
-    sessionStorage.removeItem("user");
-    sessionStorage.removeItem("token");
+
+    sessionStorage.clear();
+  };
+
+  const updateUser = (newUser) => {
+    sessionStorage.setItem("user", JSON.stringify(newUser));
+    setUser(newUser);
   };
 
   return (
-    <AuthContext.Provider value={{ user, token, login, logout }}>
+    <AuthContext.Provider value={{ user, token, login, logout, updateUser }}>
       {children}
     </AuthContext.Provider>
   );
 };
 
-//hook in SAME FILE, stable export
 export function useAuth() {
   return useContext(AuthContext);
 }

@@ -2,6 +2,8 @@ import { Menu, Search, User } from "lucide-react";
 import { Input } from "./ui/input";
 import { Link, useNavigate } from "react-router-dom";
 
+import { useAuth } from "@/context/AuthContext";
+
 export default function Navbar({
   title,
   toggleSidebar,
@@ -13,10 +15,10 @@ export default function Navbar({
 }) {
   const navigate = useNavigate();
 
-  const isLoggedIn = !!sessionStorage.getItem("token");
-  const user = sessionStorage.getItem("user")
-    ? JSON.parse(sessionStorage.getItem("user"))
-    : null;
+  // Get user from AuthContext (auto updates UI)
+  const { user, token } = useAuth();
+
+  const isLoggedIn = !!token;
 
   return (
     <header className="h-16 bg-background border-b sticky top-0 z-30 flex items-center px-4">
@@ -26,7 +28,6 @@ export default function Navbar({
         <button className="lg:hidden" onClick={toggleSidebar}>
           <Menu size={22} />
         </button>
-        {/* <h1 className="text-lg font-semibold">{title}</h1> */}
       </div>
 
       {/* CENTER */}
@@ -72,7 +73,7 @@ export default function Navbar({
           >
             {user?.profileUrl ? (
               <img
-                src={user.profileUrl}
+                src={user.profileUrl + "?t=" + Date.now()}
                 alt="Profile"
                 className="w-full h-full object-cover"
                 onError={(e) =>
