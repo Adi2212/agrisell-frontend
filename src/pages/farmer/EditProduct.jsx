@@ -32,7 +32,7 @@ export default function EditProduct() {
 
   const loadProduct = async () => {
     try {
-      const res = await productApi.get(`/${id}`);
+      const res = await productApi.get(`/get/${id}`);
       const p = res.data;
 
       setForm({

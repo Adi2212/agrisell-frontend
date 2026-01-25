@@ -10,6 +10,13 @@ import Register from "./pages/Register";
 import Categories from "./pages/Categories";
 import AccountDetails from "./pages/AccountDetails";
 import EditAccount from "./pages/EditAccount";
+import ProductInfo from "./pages/ProductInfo";
+
+import CartPage from "./pages/customers/CartPage";
+import Orders from "./pages/customers/Orders";
+import OrderDetails from "./pages/customers/OrderDetails";
+import Success from "./pages/Success";
+import Cancel from "./pages/Cancel";
 
 import AdminLogin from "./pages/admin/AdminLogin";
 import AdminDashboard from "./pages/admin/AdminDashboard";
@@ -19,6 +26,7 @@ import FarmerDashboard from "./pages/farmer/FarmerDashboard";
 import FarmerProducts from "./pages/farmer/FarmerProducts";
 import AddProduct from "./pages/farmer/AddProduct";
 import EditProduct from "./pages/farmer/EditProduct";
+import FarmerOrders from "./pages/farmer/FarmersOrders";
 
 import AddAddress from "./pages/AddAddress";
 
@@ -34,6 +42,7 @@ export default function App() {
                 <Route path="/register" element={<Register />} />
                 <Route path="/admin/login" element={<AdminLogin />} />
                 <Route path="/categories" element={<Categories />} />
+                <Route path="/product/:id" element={<ProductInfo />} />
 
 
                     {/* ================= ADMIN ROUTES ================= */}
@@ -92,7 +101,43 @@ export default function App() {
                     }
                 />
 
+                <Route
+                    path="/farmer/orders"
+                    element={
+                        <ProtectedRoute role="FARMER">
+                            <FarmerOrders />
+                        </ProtectedRoute>
+                    }
+                />
+
                 {/* ================= BUYER / USER ROUTES ================= */}
+                 <Route
+                    path="/buyer/cart"
+                    element={
+                        <ProtectedRoute role="BUYER">
+                            <CartPage />
+                        </ProtectedRoute>
+                    }
+                />
+
+                <Route
+                    path="/buyer/orders"
+                    element={
+                        <ProtectedRoute role="BUYER">
+                            <Orders />
+                        </ProtectedRoute>
+                    }
+                />
+
+                <Route
+                    path="/buyer/orders/:id"
+                    element={
+                        <ProtectedRoute role="BUYER">
+                            <OrderDetails />
+                        </ProtectedRoute>
+                    }
+                />
+
                 <Route
                     path="/addAddress"
                     element={
@@ -120,6 +165,25 @@ export default function App() {
                     }
                 />
 
+                <Route
+                    path="/payment/success"
+                    element={
+                        <ProtectedRoute>
+                            <Success />
+                        </ProtectedRoute>
+                    }
+                />
+
+                <Route
+                    path="/payment/cancel"
+                    element={
+                        <ProtectedRoute>
+                            <Cancel />
+                        </ProtectedRoute>
+                    }
+                />
+
+               
             </Routes>
 
             {/*GLOBAL THEME TOGGLE */}

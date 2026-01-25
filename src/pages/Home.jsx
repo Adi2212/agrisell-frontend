@@ -21,7 +21,7 @@ export default function Home() {
     const fetchProducts = async () => {
       try {
         setLoading(true);
-        const res = await productApi.get("", {
+        const res = await productApi.get("/get", {
           headers: { Authorization: `Bearer ${token}` },
         });
         setProducts(shuffleArray(res.data));

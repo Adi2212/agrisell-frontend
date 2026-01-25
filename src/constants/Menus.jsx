@@ -18,8 +18,8 @@ export const adminMenu = [
 export const buyerMenu = [
     { label: "Home", icon: HomeIcon, route: "/" },
     { label: "Categories", icon: Tag, route: "/categories" },
-    { label: "Orders", icon: ShoppingCart, route: "/customer/orders" },
-    { label: "Cart", icon: ShoppingCart, route: "/customer/cart" },
+    { label: "Orders", icon: ShoppingCart, route: "/buyer/orders" },
+    { label: "Cart", icon: ShoppingCart, route: "/buyer/cart" },
 ];
 
 export const farmerMenu = [

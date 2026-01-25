@@ -15,7 +15,7 @@ export default function ProductCard({ product, onClick, onAddToCart }) {
       {/* IMAGE SECTION */}
       <div className="relative h-52 flex items-center justify-center bg-muted">
         <img
-          src={product.imageUrl}
+          src={product.imgUrl}
           alt={product.name}
           className="h-40 object-contain"
         />
