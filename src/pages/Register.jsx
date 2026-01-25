@@ -64,12 +64,8 @@ export default function Register() {
         role: form.role,
       };
 
-      const endpoint =
-        form.role === "farmer"
-          ? "/register/farmer"
-          : "/register/buyer";
-
-      await authApi.post(endpoint, payload);
+      
+      await authApi.post("/register", payload);
 
       toast.success("Registration successful!");
       navigate("/login");
