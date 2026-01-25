@@ -24,7 +24,7 @@ export const buyerMenu = [
 
 export const farmerMenu = [
     { label: "Dashboard", icon: HomeIcon, route: "/farmer/dashboard" },
-    { label: "Add Product", icon: Package, route: "/farmer/add-product" },
+    { label: "Add Product", icon: Package, route: "/farmer/products/add" },
     { label: "My Products", icon: Package, route: "/farmer/products" },
     { label: "Orders", icon: ShoppingCart, route: "/farmer/orders" },
 ];

@@ -16,6 +16,9 @@ import AdminDashboard from "./pages/admin/AdminDashboard";
 import CategoryPage from "./pages/admin/CategoryPage";
 
 import FarmerDashboard from "./pages/farmer/FarmerDashboard";
+import FarmerProducts from "./pages/farmer/FarmerProducts";
+import AddProduct from "./pages/farmer/AddProduct";
+import EditProduct from "./pages/farmer/EditProduct";
 
 import AddAddress from "./pages/AddAddress";
 
@@ -58,6 +61,33 @@ export default function App() {
                     element={
                         <ProtectedRoute role="FARMER">
                             <FarmerDashboard />
+                        </ProtectedRoute>
+                    }
+                />
+
+                <Route 
+                    path="/farmer/products"
+                    element={
+                        <ProtectedRoute role="FARMER">
+                            <FarmerProducts />
+                        </ProtectedRoute>
+                    }
+                />
+
+                <Route
+                    path="/farmer/products/add"
+                    element={
+                        <ProtectedRoute role="FARMER">
+                            <AddProduct />
+                        </ProtectedRoute>
+                    }
+                />
+
+                <Route
+                    path="/farmer/products/edit/:id"
+                    element={
+                        <ProtectedRoute role="FARMER">
+                            <EditProduct />
                         </ProtectedRoute>
                     }
                 />
