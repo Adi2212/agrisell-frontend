@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { Trash2, ShoppingCart, PlusIcon, MinusIcon } from "lucide-react";
-import { userApi,orderApi } from "@/api/api";
+import { userApi, orderApi } from "@/api/api";
 import Layout from "@/components/Layout";
 import { buyerMenu } from "@/constants/menus";
 import { CartContext } from "@/context/CartContext";
@@ -56,7 +56,7 @@ export default function CartPage() {
         const orderData = {
             paymentMethod: "STRIPE",
             items: cart.map((item) => ({
-                productId: item.id,
+                product: { productId: item.id },
                 quantity: item.qty,
             })),
         };
@@ -74,6 +74,7 @@ export default function CartPage() {
                     items: items
 
                 };
+                console.log("Payment Request:", paymentReq);
 
                 const paymentRes = await userApi.post("payments/checkout", paymentReq);
 

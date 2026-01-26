@@ -20,6 +20,10 @@ import Cancel from "./pages/Cancel";
 
 import AdminLogin from "./pages/admin/AdminLogin";
 import AdminDashboard from "./pages/admin/AdminDashboard";
+import AdminBuyers from "./pages/admin/AdminBuyers";
+import AdminFarmers from "./pages/admin/AdminFarmers";
+import AdminProducts from "./pages/admin/AdminProducts";
+import AdminOrders from "./pages/admin/AdminOrders";
 import CategoryPage from "./pages/admin/CategoryPage";
 
 import FarmerDashboard from "./pages/farmer/FarmerDashboard";
@@ -60,6 +64,42 @@ export default function App() {
                     element={
                         <ProtectedRoute role="ADMIN">
                             <CategoryPage />
+                        </ProtectedRoute>
+                    }
+                />
+
+                <Route
+                    path="/admin/buyers"
+                    element={
+                        <ProtectedRoute role="ADMIN">
+                            <AdminBuyers />
+                        </ProtectedRoute>
+                    }
+                />
+
+                <Route
+                    path="/admin/farmers"
+                    element={
+                        <ProtectedRoute role="ADMIN">
+                            <AdminFarmers />
+                        </ProtectedRoute>
+                    }
+                />
+
+                <Route
+                    path="/admin/products"
+                    element={
+                        <ProtectedRoute role="ADMIN">
+                            <AdminProducts />
+                        </ProtectedRoute>
+                    }
+                />
+
+                <Route
+                    path="/admin/orders"
+                    element={
+                        <ProtectedRoute role="ADMIN">
+                            <AdminOrders />
                         </ProtectedRoute>
                     }
                 />

@@ -63,7 +63,7 @@ export default function FarmerOrders() {
           {orders.map((o) => (
             <Card
               key={o.orderId}
-              onClick={() => navigate(`/farmer/orders/${o.orderId}`)}
+              // onClick={() => navigate(`/farmer/orders/${o.orderId}`)}
               className="p-5 cursor-pointer hover:shadow-md transition border rounded-xl"
             >
               {/* Top Row */}

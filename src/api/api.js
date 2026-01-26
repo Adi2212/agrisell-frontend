@@ -36,8 +36,13 @@ export const paymentApi = axios.create({
   headers: { "Content-Type": "application/json" },
 });
 
-// Automatically attach JWT token to all requests made with productApi,userApi,categoryApi, orderApi,imagekitApi, paymentApi
-const apis = [productApi, userApi, categoryApi, orderApi, imagekitApi, paymentApi];
+export const adminApi = axios.create({
+  baseURL: "http://localhost:9090/admin",
+  headers: { "Content-Type": "application/json" },
+});
+
+// Automatically attach JWT token to all requests made with productApi,userApi,categoryApi, orderApi,imagekitApi, paymentApi, adminApi
+const apis = [productApi, userApi, categoryApi, orderApi, imagekitApi, paymentApi, adminApi];
 apis.forEach((api) => {
   api.interceptors.request.use((config) => {
     const token = sessionStorage.getItem("token");
