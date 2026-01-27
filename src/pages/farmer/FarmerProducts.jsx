@@ -13,6 +13,7 @@ import { Input } from "@/components/ui/input";
 import { Package, Pencil, Trash2, PlusCircle } from "lucide-react";
 import { productApi } from "@/api/api";
 import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 export default function FarmerProducts() {
   const navigate = useNavigate();
@@ -59,7 +60,7 @@ export default function FarmerProducts() {
       setShowDeleteModal(false);
       setSelectedProduct(null);
     } catch {
-      alert("Failed to delete product");
+      toast.error("Failed to delete product");
     } finally {
       setDeleting(false);
     }

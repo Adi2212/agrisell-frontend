@@ -19,6 +19,7 @@ import {
   AlertDialogCancel,
   AlertDialogAction,
 } from "@/components/ui/alert-dialog";
+import { toast } from "sonner";
 
 export default function OrderDetails() {
   const { id } = useParams();
@@ -38,7 +39,7 @@ export default function OrderDetails() {
       const res = await orderApi.get(`/${id}`);
       setOrder(res.data);
     } catch {
-      alert("Failed to load order");
+      toast.error("Failed to load order");
     } finally {
       setLoading(false);
     }
@@ -55,7 +56,7 @@ export default function OrderDetails() {
       window.location.href = res.data.sessionUrl;
     } catch (err) {
       console.error("Retry payment failed", err);
-      alert("Unable to retry payment");
+      toast.error("Unable to retry payment");
     }
   };
 
@@ -68,11 +69,11 @@ export default function OrderDetails() {
 
       await orderApi.put(`/cancel/${order.orderId}`);
 
-      alert("Order Cancelled Successfully");
+      toast.success("Order Cancelled Successfully");
 
       fetchOrder();
     } catch {
-      alert("Failed to cancel order");
+      toast.error("Failed to cancel order");
     } finally {
       setCancelling(false);
     }

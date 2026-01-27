@@ -13,6 +13,7 @@ import {
 
 import { IKUpload, IKContext } from "imagekitio-react";
 import { categoryApi, imagekitApi } from "@/api/api";
+import { toast } from "sonner";
 
 export default function CategoryForm({ editData, onSuccess }) {
   const [categories, setCategories] = useState([]);
@@ -66,7 +67,7 @@ export default function CategoryForm({ editData, onSuccess }) {
 
   // Upload error handler
   const onUploadError = () => {
-    alert("Image upload failed!");
+    toast.error("Image upload failed!");
   };
 
   // Submit form
@@ -89,7 +90,7 @@ export default function CategoryForm({ editData, onSuccess }) {
 
       onSuccess();
     } catch {
-      alert("Operation failed");
+      toast.error("Operation failed");
     } finally {
       setLoading(false);
     }

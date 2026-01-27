@@ -9,6 +9,7 @@ import StatusBadge from "@/components/StatusBadge";
 import PaymentBadge from "@/components/PaymentBadge";
 
 import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
 
 export default function Orders() {
   const navigate = useNavigate();
@@ -28,7 +29,7 @@ export default function Orders() {
       setOrders(res.data);
     } catch (err) {
       console.error("Failed to load orders:", err);
-      alert("Unable to load orders");
+      toast.error("Unable to load orders");
     } finally {
       setLoading(false);
     }
@@ -43,7 +44,7 @@ export default function Orders() {
       window.location.href = res.data.sessionUrl;
     } catch (err) {
       console.error("Retry payment failed:", err);
-      alert("Unable to retry payment. Please try again.");
+      toast.error("Unable to retry payment. Please try again.");
     }
   };
 

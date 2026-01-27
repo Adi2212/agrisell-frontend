@@ -22,6 +22,7 @@ import { IKUpload, IKContext } from "imagekitio-react";
 import { Upload } from "lucide-react";
 
 import { categoryApi, productApi, imagekitApi } from "@/api/api";
+import { toast } from "sonner";
 
 export default function AddProduct() {
   const navigate = useNavigate();
@@ -52,7 +53,7 @@ export default function AddProduct() {
         const res = await categoryApi.get("/main");
         setMainCategories(res.data);
       } catch {
-        alert("Failed to load categories");
+        toast.error("Failed to load categories");
       }
     };
 
@@ -68,7 +69,7 @@ export default function AddProduct() {
       const res = await categoryApi.get(`/sub/${value}`);
       setSubCategories(res.data);
     } catch {
-      alert("Failed to load subcategories");
+      toast.error("Failed to load subcategories");
     }
   };
 
@@ -89,7 +90,7 @@ export default function AddProduct() {
   };
 
   const onUploadError = () => {
-    alert("Image upload failed");
+    toast.error("Image upload failed");
   };
 
   // Submit product
@@ -97,7 +98,7 @@ export default function AddProduct() {
     e.preventDefault();
 
     if (!form.name || !form.price || !form.category || !imgUrl) {
-      alert("Please fill all required fields and upload image");
+      toast.error("Please fill all required fields and upload image");
       return;
     }
 
@@ -115,10 +116,10 @@ export default function AddProduct() {
 
       await productApi.post("/add", body);
 
-      alert("Product Added Successfully");
+      toast.success("Product Added Successfully");
       navigate("/farmer/products");
     } catch {
-      alert("Failed to add product");
+      toast.error("Failed to add product");
     } finally {
       setLoading(false);
     }

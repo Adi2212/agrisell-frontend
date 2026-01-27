@@ -8,6 +8,7 @@ import StatusBadge from "@/components/StatusBadge";
 import PaymentBadge from "@/components/PaymentBadge";
 
 import { Card } from "@/components/ui/card";
+import { toast } from "sonner";
 
 export default function FarmerOrders() {
   const navigate = useNavigate();
@@ -29,7 +30,7 @@ export default function FarmerOrders() {
 
     } catch (err) {
       console.error("Failed to load farmer orders:", err);
-      alert("Unable to load orders");
+      toast.error("Unable to load orders");
     } finally {
       setLoading(false);
     }
