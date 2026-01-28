@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams,useNavigate } from "react-router-dom";
 
 import Layout from "@/components/Layout";
 import { buyerMenu } from "@/constants/menus";
@@ -27,6 +27,7 @@ export default function OrderDetails() {
   const [order, setOrder] = useState(null);
   const [loading, setLoading] = useState(true);
   const [cancelling, setCancelling] = useState(false);
+  const navigate = useNavigate();
 
   const steps = ["PENDING", "CONFIRMED", "SHIPPED", "DELIVERED"];
 
@@ -259,9 +260,11 @@ export default function OrderDetails() {
             {order.items.map((item) => (
               <div
                 key={item.product.productId}
-                className="flex justify-between border-b pb-2"
+                className="flex justify-between border-b pb-2 cursor-pointer"
               >
-                <p>{item.product.productName}</p>
+                <p onClick={() => navigate(`/product/${item.product.productId}`)}>
+                  {item.product.productName}
+                </p>
                 <p>
                   {item.quantity} × ₹{item.price}
                 </p>

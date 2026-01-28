@@ -25,7 +25,7 @@ export default function Success() {
         await orderApi.put(`/${orderId}/payment-success`);
 
         // Clear cart after successful payment
-        clearCart();
+        
 
         toast.success("Payment successful. Cart cleared.");
       } catch (err) {
@@ -35,6 +35,7 @@ export default function Success() {
 
       // Redirect after 3 sec
       setTimeout(() => {
+        clearCart();
         navigate("/buyer/orders");
       }, 3000);
     };

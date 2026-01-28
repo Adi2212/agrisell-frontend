@@ -7,7 +7,7 @@ import { useAuth } from "@/context/AuthContext";
 
 export default function AccountDetails() {
   const navigate = useNavigate();
-  const { logout } = useAuth(); // ✅ Use context logout
+  const { logout } = useAuth(); //  Use context logout
 
   const [user, setUser] = useState(null);
   const [menu, setMenu] = useState([]);
