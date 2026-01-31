@@ -39,6 +39,7 @@ export default function EditProduct() {
         name: p.name,
         description: p.description,
         price: p.price,
+        categoryId: p.category.id,
         stockQuantity: p.stockQuantity,
       });
 

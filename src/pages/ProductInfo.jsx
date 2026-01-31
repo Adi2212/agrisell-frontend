@@ -9,6 +9,7 @@ import Layout from "@/components/Layout";
 import { buyerMenu } from "@/constants/Menus";
 import { ShoppingCart } from "lucide-react";
 import StarRating from "@/components/StarRating";
+import { toast } from "sonner";
 
 export default function ProductInfo() {
   const navigate = useNavigate();
@@ -48,14 +49,14 @@ export default function ProductInfo() {
         comment,
       });
 
-      alert("Review added successfully!");
+      toast.success("Review added successfully!");
 
       setComment("");
       setRating(5);
 
       fetchReviews(); // refresh list
     } catch (err) {
-      alert(err.response?.data?.message || "Failed to add review");
+      toast.error(err.response?.data?.message || "Failed to add review");
     }
   };
 
@@ -112,7 +113,7 @@ export default function ProductInfo() {
 
           <div className="mt-6">
             <span className="line-through text-muted-foreground text-xl">
-              ₹{product.price + 500}
+              ₹{product.price + 20}
             </span>
             <h2 className="text-4xl font-bold text-primary">
               ₹{product.price}

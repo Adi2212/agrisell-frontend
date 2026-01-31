@@ -33,7 +33,7 @@ export default function Register() {
     password: "",
     confirmPassword: "",
     phone: "",
-    role: "buyer", // default
+    role: "BUYER", // default
   });
 
   const [showPassword, setShowPassword] = useState(false);
@@ -199,8 +199,8 @@ export default function Register() {
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="buyer">Buyer</SelectItem>
-                  <SelectItem value="farmer">Farmer</SelectItem>
+                  <SelectItem value="BUYER">Buyer</SelectItem>
+                  <SelectItem value="FARMER">Farmer</SelectItem>
                 </SelectContent>
               </Select>
             </div>
