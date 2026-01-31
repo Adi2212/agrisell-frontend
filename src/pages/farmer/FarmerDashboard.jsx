@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Layout from "../../components/Layout";
-import { farmerMenu } from "@/constants/menus";
+import { farmerMenu } from "@/constants/Menus";
 import { useNavigate } from "react-router-dom";
 
 import { BarChart3, Package, ShoppingCart, PlusCircle } from "lucide-react";

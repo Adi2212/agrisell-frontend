@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Trash2, ShoppingCart, PlusIcon, MinusIcon } from "lucide-react";
 import { userApi, orderApi } from "@/api/api";
 import Layout from "@/components/Layout";
-import { buyerMenu } from "@/constants/menus";
+import { buyerMenu } from "@/constants/Menus";
 import { CartContext } from "@/context/CartContext";
 
 import { toast } from "sonner";

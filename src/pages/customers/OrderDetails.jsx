@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams,useNavigate } from "react-router-dom";
 
 import Layout from "@/components/Layout";
-import { buyerMenu } from "@/constants/menus";
+import { buyerMenu } from "@/constants/Menus";
 import { orderApi, paymentApi } from "@/api/api";
 
 import { Card } from "@/components/ui/card";

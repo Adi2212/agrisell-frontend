@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { adminApi } from "../../api/api";
 import Layout from "../../components/Layout";
-import { adminMenu } from "../../constants/menus";
+import { adminMenu } from "../../constants/Menus";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 

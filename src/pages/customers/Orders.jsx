@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Layout from "@/components/Layout";
-import { buyerMenu } from "@/constants/menus";
+import { buyerMenu } from "@/constants/Menus";
 
 import { orderApi, userApi } from "@/api/api";
 import { useNavigate } from "react-router-dom";

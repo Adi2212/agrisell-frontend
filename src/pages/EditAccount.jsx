@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { IKContext, IKUpload } from "imagekitio-react";
 import Layout from "@/components/Layout";
-import { buyerMenu, farmerMenu, adminMenu } from "@/constants/menus";
+import { buyerMenu, farmerMenu, adminMenu } from "@/constants/Menus";
 
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";

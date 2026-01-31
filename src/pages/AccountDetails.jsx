@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Layout from "@/components/Layout";
-import { buyerMenu, farmerMenu, adminMenu } from "@/constants/menus";
+import { buyerMenu, farmerMenu, adminMenu } from "@/constants/Menus";
 import { useNavigate } from "react-router-dom";
 import { User, LogOut, Edit } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";

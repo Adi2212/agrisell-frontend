@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Layout from "@/components/Layout";
-import { farmerMenu } from "@/constants/menus";
+import { farmerMenu } from "@/constants/Menus";
 import { useNavigate, useParams } from "react-router-dom";
 
 import { Input } from "@/components/ui/input";

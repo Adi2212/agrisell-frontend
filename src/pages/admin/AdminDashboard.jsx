@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import Layout from "../../components/Layout";
-import { adminMenu } from "@/constants/menus";
+import Layout from "@/components/Layout";
+import { adminMenu } from "@/constants/Menus";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Users, Package, ShoppingCart, IndianRupee } from "lucide-react";

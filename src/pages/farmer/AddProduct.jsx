@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 import Layout from "@/components/Layout";
-import { farmerMenu } from "@/constants/menus";
+import { farmerMenu } from "@/constants/Menus";
 
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";

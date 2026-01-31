@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { productApi } from "@/api/api";
 import Layout from "@/components/Layout";
 import ProductCard from "@/components/ProductCard";
-import { buyerMenu } from "@/constants/menus";
+import { buyerMenu } from "@/constants/Menus";
 import { ShoppingCart } from "lucide-react";
 import { CartContext } from "@/context/CartContext";
 import BannerSlider from "@/components/BannerSlider";

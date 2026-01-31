@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import Layout from "@/components/Layout";
-import { buyerMenu } from "@/constants/menus";
+import { buyerMenu } from "@/constants/Menus";
 
 import { categoryApi, productApi } from "@/api/api";
 
