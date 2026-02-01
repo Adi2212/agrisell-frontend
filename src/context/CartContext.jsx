@@ -21,7 +21,7 @@ export function CartProvider({ children }) {
   const addToCart = (product) => {
     setCart((prev) => {
       const exist = prev.find((item) => item.id === product.id);
-
+toast.success("Product added to cart");
       if (exist) {
         return prev.map((item) =>
           item.id === product.id
