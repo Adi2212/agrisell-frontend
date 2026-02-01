@@ -1,4 +1,5 @@
 import { createContext, useState, useEffect } from "react";
+import { toast } from "sonner";
 
 export const CartContext = createContext({
   cart: [],
