@@ -1,6 +1,7 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
+import { CartProvider } from "./context/CartContext";
 import ThemeToggle from "./components/ThemeToggle";
 import ProtectedRoute from "./components/ProtectedRoute";
 
@@ -36,8 +37,10 @@ import AddAddress from "./pages/AddAddress";
 
 
 
+
 export default function App() {
     return (
+        <CartProvider>
         <AuthProvider>
             <Routes>
                 {/* ================= PUBLIC ROUTES ================= */}
@@ -231,5 +234,6 @@ export default function App() {
                 <ThemeToggle />
             </div>
         </AuthProvider>
+        </CartProvider>
     );
 }
