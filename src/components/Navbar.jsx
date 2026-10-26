@@ -1,8 +1,10 @@
-import { Menu, Search, User } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Menu, Search, User, Heart } from "lucide-react";
 import { Input } from "./ui/input";
 import { Link, useNavigate } from "react-router-dom";
 
 import { useAuth } from "@/context/AuthContext";
+import NotificationDropdown from "./NotificationDropdown";
 
 export default function Navbar({
   title,
@@ -17,6 +19,11 @@ export default function Navbar({
 
   // Get user from AuthContext (auto updates UI)
   const { user, token } = useAuth();
+  const [imgError, setImgError] = useState(false);
+
+  useEffect(() => {
+    setImgError(false);
+  }, [user?.profileUrl]);
 
   const isLoggedIn = !!token;
 
@@ -59,6 +66,18 @@ export default function Navbar({
           </button>
         )}
 
+        {isLoggedIn && user?.role === "BUYER" && (
+          <button
+            onClick={() => navigate("/buyer/wishlist")}
+            className="p-2 rounded-full hover:bg-secondary/10 transition"
+            title="Wishlist"
+          >
+            <Heart size={18} />
+          </button>
+        )}
+
+        <NotificationDropdown />
+
         {!isLoggedIn ? (
           <Link
             to="/login"
@@ -71,14 +90,13 @@ export default function Navbar({
             onClick={() => navigate("/account")}
             className="w-9 h-9 rounded-full overflow-hidden border flex items-center justify-center bg-muted hover:ring-2 hover:ring-primary"
           >
-            {user?.profileUrl ? (
+            {user?.profileUrl && !imgError ? (
               <img
-                src={user.profileUrl + "?t=" + Date.now()}
+                src={user.profileUrl}
                 alt="Profile"
+                referrerPolicy="no-referrer"
                 className="w-full h-full object-cover"
-                onError={(e) =>
-                  (e.currentTarget.src = "/default-avatar.png")
-                }
+                onError={() => setImgError(true)}
               />
             ) : (
               <User size={18} />

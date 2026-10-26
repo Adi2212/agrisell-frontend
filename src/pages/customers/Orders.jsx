@@ -9,7 +9,9 @@ import StatusBadge from "@/components/StatusBadge";
 import PaymentBadge from "@/components/PaymentBadge";
 
 import { Button } from "@/components/ui/button";
+import { Calendar } from "lucide-react";
 import { toast } from "sonner";
+import { formatOrderDateTime } from "@/lib/utils";
 
 export default function Orders() {
   const navigate = useNavigate();
@@ -26,7 +28,7 @@ export default function Orders() {
     try {
       setLoading(true);
       const res = await orderApi.get("/user");
-      setOrders(res.data);
+      setOrders(res.data || []);
     } catch (err) {
       console.error("Failed to load orders:", err);
       toast.error("Unable to load orders");
@@ -81,11 +83,12 @@ export default function Orders() {
               <div className="flex justify-between items-center">
                 <p className="font-medium">
                   Order ID:{" "}
-                  <span className="font-semibold">{o.orderId}</span>
+                  <span className="font-semibold">#{o.orderId}</span>
                 </p>
 
-                <p className="text-sm text-muted-foreground">
-                  {new Date(o.createdAt).toLocaleDateString()}
+                <p className="text-sm text-muted-foreground flex items-center gap-1.5">
+                  <Calendar className="w-4 h-4 text-primary" />
+                  <span>{formatOrderDateTime(o.createdAt)}</span>
                 </p>
               </div>
 

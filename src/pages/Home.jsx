@@ -37,9 +37,8 @@ export default function Home() {
   }, []);
 
   const shuffleArray = (array) => {
-  return [...array].sort(() => Math.random() - 0.5);
-};
-
+    return [...array].sort(() => Math.random() - 0.5);
+  };
 
   return (
     <Layout
@@ -53,12 +52,12 @@ export default function Home() {
       searchValue={search}
       onSearchChange={setSearch}
       cartIcon={ShoppingCart}
-      onCartClick={() => navigate("/customer/cart")}
+      onCartClick={() => navigate("/buyer/cart")}
     >
       <BannerSlider />
 
       {/* MAIN CONTENT */}
-      <main className="p-6">
+      <main id="featured-products" className="p-6">
         {/* Loading */}
         {loading && (
           <div className="flex justify-center items-center text-lg text-muted-foreground">

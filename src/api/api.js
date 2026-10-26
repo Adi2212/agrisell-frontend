@@ -56,6 +56,30 @@ export const reviewApi = axios.create({
   headers: { "Content-Type": "application/json" },
 });
 
+/* Notification API */
+export const notificationApi = axios.create({
+  baseURL: `${BASE_URL}/notifications`,
+  headers: { "Content-Type": "application/json" },
+});
+
+/* Cart API */
+export const cartApi = axios.create({
+  baseURL: `${BASE_URL}/cart`,
+  headers: { "Content-Type": "application/json" },
+});
+
+/* Wishlist API */
+export const wishlistApi = axios.create({
+  baseURL: `${BASE_URL}/wishlist`,
+  headers: { "Content-Type": "application/json" },
+});
+
+/* Offer API */
+export const offerApi = axios.create({
+  baseURL: `${BASE_URL}/offers`,
+  headers: { "Content-Type": "application/json" },
+});
+
 /* Attach JWT Token Interceptor */
 const apis = [
   productApi,
@@ -66,6 +90,10 @@ const apis = [
   paymentApi,
   adminApi,
   reviewApi,
+  notificationApi,
+  cartApi,
+  wishlistApi,
+  offerApi,
 ];
 
 apis.forEach((api) => {

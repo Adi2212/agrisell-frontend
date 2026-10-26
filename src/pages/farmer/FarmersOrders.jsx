@@ -9,6 +9,8 @@ import PaymentBadge from "@/components/PaymentBadge";
 
 import { Card } from "@/components/ui/card";
 import { toast } from "sonner";
+import { formatOrderDateTime } from "@/lib/utils";
+import { Calendar } from "lucide-react";
 
 export default function FarmerOrders() {
   const navigate = useNavigate();
@@ -26,7 +28,7 @@ export default function FarmerOrders() {
       setLoading(true);
 
       const res = await orderApi.get("/farmer");
-      setOrders(res.data);
+      setOrders(res.data || []);
 
     } catch (err) {
       console.error("Failed to load farmer orders:", err);
@@ -64,18 +66,18 @@ export default function FarmerOrders() {
           {orders.map((o) => (
             <Card
               key={o.orderId}
-              // onClick={() => navigate(`/farmer/orders/${o.orderId}`)}
               className="p-5 cursor-pointer hover:shadow-md transition border rounded-xl"
             >
               {/* Top Row */}
               <div className="flex justify-between items-center">
                 <p className="font-medium">
                   Order ID:{" "}
-                  <span className="font-semibold">{o.orderId}</span>
+                  <span className="font-semibold">#{o.orderId}</span>
                 </p>
 
-                <p className="text-sm text-muted-foreground">
-                  {new Date(o.createdAt).toLocaleDateString()}
+                <p className="text-sm text-muted-foreground flex items-center gap-1.5">
+                  <Calendar className="w-4 h-4 text-primary" />
+                  <span>{formatOrderDateTime(o.createdAt)}</span>
                 </p>
               </div>
 
@@ -92,7 +94,7 @@ export default function FarmerOrders() {
 
               {/* Items Preview */}
               <div className="mt-3 text-sm text-muted-foreground">
-                {o.items.length} item(s) ordered
+                {o.items?.length || 0} item(s) ordered
               </div>
             </Card>
           ))}

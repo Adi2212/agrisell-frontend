@@ -5,12 +5,16 @@ import App from './App.jsx'
 import { BrowserRouter } from "react-router-dom";
 import { Toaster } from "sonner";
 
+import { GoogleOAuthProvider } from '@react-oauth/google';
+
 createRoot(document.getElementById('root')).render(
 
   <StrictMode>
-    <BrowserRouter>
-        <App />
-        <Toaster richColors closeButton position="top-right" />
-    </BrowserRouter>
+    <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID || 'default-client-id'}>
+      <BrowserRouter>
+          <App />
+          <Toaster richColors closeButton position="top-right" />
+      </BrowserRouter>
+    </GoogleOAuthProvider>
   </StrictMode>
 )

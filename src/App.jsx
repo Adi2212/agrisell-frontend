@@ -2,6 +2,7 @@ import React from "react";
 import { Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
 import { CartProvider } from "./context/CartContext";
+import { WishlistProvider } from "./context/WishlistContext";
 import ThemeToggle from "./components/ThemeToggle";
 import ProtectedRoute from "./components/ProtectedRoute";
 
@@ -14,6 +15,7 @@ import EditAccount from "./pages/EditAccount";
 import ProductInfo from "./pages/ProductInfo";
 
 import CartPage from "./pages/customers/CartPage";
+import WishlistPage from "./pages/customers/WishlistPage";
 import Orders from "./pages/customers/Orders";
 import OrderDetails from "./pages/customers/OrderDetails";
 import Success from "./pages/Success";
@@ -25,6 +27,7 @@ import AdminBuyers from "./pages/admin/AdminBuyers";
 import AdminFarmers from "./pages/admin/AdminFarmers";
 import AdminProducts from "./pages/admin/AdminProducts";
 import AdminOrders from "./pages/admin/AdminOrders";
+import AdminOffers from "./pages/admin/AdminOffers";
 import CategoryPage from "./pages/admin/CategoryPage";
 
 import FarmerDashboard from "./pages/farmer/FarmerDashboard";
@@ -40,8 +43,9 @@ import AddAddress from "./pages/AddAddress";
 
 export default function App() {
     return (
-        <CartProvider>
         <AuthProvider>
+        <CartProvider>
+        <WishlistProvider>
             <Routes>
                 {/* ================= PUBLIC ROUTES ================= */}
                 <Route path="/" element={<Home />} />
@@ -107,6 +111,15 @@ export default function App() {
                     }
                 />
 
+                <Route
+                    path="/admin/offers"
+                    element={
+                        <ProtectedRoute role="ADMIN">
+                            <AdminOffers />
+                        </ProtectedRoute>
+                    }
+                />
+
                 {/* ================= FARMER ROUTES ================= */}
                 <Route
                     path="/farmer/dashboard"
@@ -153,12 +166,21 @@ export default function App() {
                     }
                 />
 
-                {/* ================= BUYER / USER ROUTES ================= */}
+                    {/* ================= BUYER / USER ROUTES ================= */}
                  <Route
                     path="/buyer/cart"
                     element={
                         <ProtectedRoute role="BUYER">
                             <CartPage />
+                        </ProtectedRoute>
+                    }
+                />
+
+                <Route
+                    path="/buyer/wishlist"
+                    element={
+                        <ProtectedRoute role="BUYER">
+                            <WishlistPage />
                         </ProtectedRoute>
                     }
                 />
@@ -233,7 +255,8 @@ export default function App() {
             <div className="fixed bottom-4 left-4 z-50">
                 <ThemeToggle />
             </div>
-        </AuthProvider>
+        </WishlistProvider>
         </CartProvider>
+        </AuthProvider>
     );
 }

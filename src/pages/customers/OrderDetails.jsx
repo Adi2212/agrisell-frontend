@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { useParams,useNavigate } from "react-router-dom";
+import React, { useEffect, useState, useMemo } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 
 import Layout from "@/components/Layout";
 import { buyerMenu } from "@/constants/Menus";
@@ -20,6 +20,10 @@ import {
   AlertDialogAction,
 } from "@/components/ui/alert-dialog";
 import { toast } from "sonner";
+import { formatOrderDateTime } from "@/lib/utils";
+import { Calendar, Clock, CheckCircle2, PackageCheck } from "lucide-react";
+import StatusBadge from "@/components/StatusBadge";
+import PaymentBadge from "@/components/PaymentBadge";
 
 export default function OrderDetails() {
   const { id } = useParams();
@@ -83,7 +87,7 @@ export default function OrderDetails() {
   if (loading) {
     return (
       <Layout title="Order Details" menuItems={buyerMenu}>
-        <p className="p-6">Loading...</p>
+        <p className="p-6 text-muted-foreground">Loading order details...</p>
       </Layout>
     );
   }
@@ -98,42 +102,76 @@ export default function OrderDetails() {
 
   const status = order.orderStatus;
   const isCancelled = status === "CANCELLED";
-
-  const canCancel =
-    status === "PENDING" || status === "CONFIRMED";
-
+  const canCancel = status === "PENDING" || status === "CONFIRMED";
   const currentStep = steps.indexOf(status);
+
+  // Helper to find date for a specific status step
+  const getStepDate = (stepName) => {
+    if (!order.history || !Array.isArray(order.history)) {
+      if (stepName === "PENDING" && order.createdAt) {
+        return formatOrderDateTime(order.createdAt);
+      }
+      return null;
+    }
+    const record = order.history.find((h) => h.status === stepName);
+    if (record) {
+      return formatOrderDateTime(record.changedAt || record.createdAt);
+    }
+    if (stepName === "PENDING" && order.createdAt) {
+      return formatOrderDateTime(order.createdAt);
+    }
+    return null;
+  };
+
+  // Filter out consecutive duplicate statuses from history for display
+  const cleanHistory = useMemo(() => {
+    if (!order?.history || !Array.isArray(order.history)) return [];
+    return order.history.filter((entry, idx, arr) => {
+      if (idx === 0) return true;
+      return entry.status !== arr[idx - 1].status;
+    });
+  }, [order?.history]);
 
   return (
     <Layout title="Order Details" menuItems={buyerMenu}>
       <div className="max-w-3xl mx-auto p-6 space-y-6">
 
-        {/* Order Info */}
-        <Card className="p-6 space-y-2">
-          <h2 className="text-xl font-bold">
-            Order ID: {order.orderId}
-          </h2>
+        {/* Order Info Card */}
+        <Card className="p-6 space-y-3">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
+            <div>
+              <h2 className="text-xl font-bold">
+                Order #{order.orderId}
+              </h2>
+              <p className="text-sm text-muted-foreground flex items-center gap-1.5 mt-1">
+                <Calendar className="w-4 h-4 text-primary" />
+                <span>Placed on: <strong>{formatOrderDateTime(order.createdAt)}</strong></span>
+              </p>
+            </div>
 
-          <p>
-            Total Amount: <b>₹{order.totalAmount}</b>
-          </p>
+            <div className="flex gap-2">
+              <StatusBadge status={order.orderStatus} />
+              <PaymentBadge status={order.paymentStatus} />
+            </div>
+          </div>
 
-          <p className="text-sm text-muted-foreground">
-            Ordered on: {new Date(order.createdAt).toLocaleString()}
-          </p>
+          <div className="pt-2 border-t flex justify-between items-center">
+            <span className="text-muted-foreground text-sm">Total Amount:</span>
+            <span className="text-2xl font-bold text-primary">₹{order.totalAmount}</span>
+          </div>
 
           {/* Cancelled Message */}
           {isCancelled && (
-            <p className="text-red-600 font-semibold mt-2">
+            <div className="p-3 bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-900/50 rounded-lg text-red-600 font-semibold text-sm">
               This Order was Cancelled
-            </p>
+            </div>
           )}
 
           {/* Cancel Button with Alert Dialog */}
           {canCancel && !isCancelled && (
             <AlertDialog>
               <AlertDialogTrigger asChild>
-                <Button variant="destructive" className="mt-4">
+                <Button variant="destructive" className="mt-2">
                   Cancel Order
                 </Button>
               </AlertDialogTrigger>
@@ -171,7 +209,7 @@ export default function OrderDetails() {
           {order.paymentStatus === "FAILED" && !isCancelled && (
             <AlertDialog>
               <AlertDialogTrigger asChild>
-                <Button variant="outline" className="mt-3">
+                <Button variant="outline" className="mt-2">
                   Retry Payment
                 </Button>
               </AlertDialogTrigger>
@@ -205,69 +243,125 @@ export default function OrderDetails() {
           )}
         </Card>
 
-        {/* Progress Tracker */}
+        {/* Progress Tracker with Step Dates */}
         {!isCancelled && (
           <Card className="p-6">
-            <h3 className="font-semibold mb-6">
+            <h3 className="font-semibold text-base mb-6 flex items-center gap-2">
+              <PackageCheck className="w-5 h-5 text-primary" />
               Order Status Progress
             </h3>
 
-            <div className="relative flex justify-between items-center">
-              <div className="absolute top-4 left-0 right-0 h-1 bg-muted rounded-full" />
+            <div className="relative flex justify-between items-start">
+              <div className="absolute top-5 left-8 right-8 h-1 bg-muted rounded-full" />
 
-              <div
-                className="absolute top-4 left-0 h-1 bg-primary rounded-full"
-                style={{
-                  width: `${(currentStep / (steps.length - 1)) * 100}%`,
-                }}
-              />
-
-              {steps.map((step, index) => (
+              {currentStep >= 0 && (
                 <div
-                  key={step}
-                  className="relative flex flex-col items-center flex-1"
-                >
-                  <div
-                    className={`w-10 h-10 rounded-full flex items-center justify-center font-bold z-10
-                      ${index <= currentStep
-                        ? "bg-primary text-white"
-                        : "bg-muted text-muted-foreground"
-                      }`}
-                  >
-                    {index + 1}
-                  </div>
+                  className="absolute top-5 left-8 h-1 bg-primary rounded-full transition-all duration-500"
+                  style={{
+                    width: `${Math.min(100, Math.max(0, (currentStep / (steps.length - 1)) * 100))}%`,
+                  }}
+                />
+              )}
 
-                  <p
-                    className={`mt-2 text-xs font-medium
-                      ${index <= currentStep
-                        ? "text-primary"
-                        : "text-muted-foreground"
-                      }`}
+              {steps.map((step, index) => {
+                const isPassed = index <= currentStep;
+                const stepDate = getStepDate(step);
+
+                return (
+                  <div
+                    key={step}
+                    className="relative flex flex-col items-center flex-1 text-center"
                   >
-                    {step}
-                  </p>
+                    <div
+                      className={`w-10 h-10 rounded-full flex items-center justify-center font-bold z-10 transition-colors shadow-sm
+                        ${isPassed
+                          ? "bg-primary text-primary-foreground ring-4 ring-background"
+                          : "bg-muted text-muted-foreground ring-4 ring-background"
+                        }`}
+                    >
+                      {isPassed ? (
+                        <CheckCircle2 className="w-5 h-5" />
+                      ) : (
+                        <span>{index + 1}</span>
+                      )}
+                    </div>
+
+                    <p
+                      className={`mt-2 text-xs font-semibold
+                        ${isPassed
+                          ? "text-primary"
+                          : "text-muted-foreground"
+                        }`}
+                    >
+                      {step}
+                    </p>
+
+                    {/* Timestamp for this step */}
+                    {stepDate && (
+                      <span className="text-[11px] text-muted-foreground/80 mt-1 max-w-[100px] leading-tight">
+                        {stepDate}
+                      </span>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          </Card>
+        )}
+
+        {/* Order History Timeline (with timestamps) */}
+        {order.history && order.history.length > 0 && (
+          <Card className="p-6 space-y-4">
+            <h3 className="font-semibold text-base flex items-center gap-2">
+              <Clock className="w-5 h-5 text-primary" />
+              Order History Timeline
+            </h3>
+
+            <div className="border-l-2 border-primary/30 ml-3 pl-4 space-y-4">
+              {cleanHistory.map((entry, idx) => (
+                <div key={entry.id || idx} className="relative">
+                  <div className="absolute -left-[23px] top-1.5 w-3 h-3 rounded-full bg-primary ring-4 ring-background" />
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
+                    <p className="font-semibold text-sm text-foreground">
+                      Status updated to <span className="text-primary">{entry.status}</span>
+                    </p>
+                    <p className="text-xs text-muted-foreground">
+                      {formatOrderDateTime(entry.changedAt || entry.createdAt)}
+                    </p>
+                  </div>
                 </div>
               ))}
             </div>
           </Card>
         )}
 
-        {/* Items */}
+        {/* Items Card */}
         <Card className="p-6">
-          <h3 className="font-semibold mb-4">Items</h3>
+          <h3 className="font-semibold mb-4 text-base">Items Ordered</h3>
 
           <div className="space-y-3">
             {order.items.map((item) => (
               <div
                 key={item.product.productId}
-                className="flex justify-between border-b pb-2 cursor-pointer"
+                className="flex justify-between items-center border-b pb-3 cursor-pointer hover:bg-muted/30 p-2 rounded-lg transition"
+                onClick={() => navigate(`/product/${item.product.productId}`)}
               >
-                <p onClick={() => navigate(`/product/${item.product.productId}`)}>
-                  {item.product.productName}
-                </p>
-                <p>
-                  {item.quantity} × ₹{item.price}
-                </p>
+                <div>
+                  <p className="font-medium text-sm text-foreground hover:text-primary transition">
+                    {item.product.productName}
+                  </p>
+                  <p className="text-xs text-muted-foreground mt-0.5">
+                    Quantity: {item.quantity}
+                  </p>
+                </div>
+                <div className="text-right">
+                  <p className="font-bold text-sm">
+                    ₹{item.price * item.quantity}
+                  </p>
+                  <p className="text-xs text-muted-foreground">
+                    ₹{item.price} each
+                  </p>
+                </div>
               </div>
             ))}
           </div>

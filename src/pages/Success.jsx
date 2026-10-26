@@ -1,4 +1,4 @@
-import { useEffect, useContext } from "react";
+import { useEffect, useContext, useRef } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { orderApi } from "@/api/api";
 import { toast } from "sonner";
@@ -12,21 +12,21 @@ export default function Success() {
   const { clearCart } = useContext(CartContext);
 
   const orderId = searchParams.get("orderId");
+  const processedRef = useRef(false);
 
   useEffect(() => {
+    if (processedRef.current) return;
+    if (!orderId) {
+      toast.error("Order ID missing");
+      return;
+    }
+
+    processedRef.current = true;
+
     const markSuccess = async () => {
       try {
-        if (!orderId) {
-          toast.error("Order ID missing");
-          return;
-        }
-
         // Confirm payment
         await orderApi.put(`/${orderId}/payment-success`);
-
-        // Clear cart after successful payment
-        
-
         toast.success("Payment successful. Cart cleared.");
       } catch (err) {
         console.error(err);

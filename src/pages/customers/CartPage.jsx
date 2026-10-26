@@ -1,10 +1,11 @@
 import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import { Trash2, ShoppingCart, PlusIcon, MinusIcon } from "lucide-react";
+import { Trash2, ShoppingCart, PlusIcon, MinusIcon, Heart } from "lucide-react";
 import { userApi, orderApi } from "@/api/api";
 import Layout from "@/components/Layout";
 import { buyerMenu } from "@/constants/Menus";
 import { CartContext } from "@/context/CartContext";
+import { WishlistContext } from "@/context/WishlistContext";
 
 import { toast } from "sonner";
 
@@ -28,6 +29,12 @@ export default function CartPage() {
     const navigate = useNavigate();
     const { cart, updateQty, removeFromCart, addToCart } =
         useContext(CartContext);
+    const { wishlist, addToWishlist, removeFromWishlist } = useContext(WishlistContext);
+
+    const handleMoveToCart = (item) => {
+        addToCart(item);
+        removeFromWishlist(item.id);
+    };
 
     const handleRemove = (item) => {
         removeFromCart(item.id);
@@ -169,16 +176,29 @@ export default function CartPage() {
                                 </div>
                             </div>
 
-                            {/* RIGHT: DELETE BUTTON */}
-                            <AlertDialog>
-                                <AlertDialogTrigger asChild>
-                                    <Button
-                                        variant="destructive"
-                                        className="text-destructive-foreground bg-destructive/90 hover:bg-destructive/80 "
-                                    >
-                                        <Trash2 size={20} />
-                                    </Button>
-                                </AlertDialogTrigger>
+                            {/* RIGHT: DELETE & SAVE FOR LATER BUTTONS */}
+                            <div className="flex flex-col gap-2">
+                                <Button
+                                    variant="outline"
+                                    onClick={() => {
+                                        addToWishlist(item.id);
+                                        removeFromCart(item.id);
+                                    }}
+                                    className="text-primary bg-background hover:bg-muted"
+                                    title="Save for Later"
+                                >
+                                    <Heart size={18} />
+                                </Button>
+                                <AlertDialog>
+                                    <AlertDialogTrigger asChild>
+                                        <Button
+                                            variant="destructive"
+                                            className="text-destructive-foreground bg-destructive/90 hover:bg-destructive/80"
+                                            title="Remove from Cart"
+                                        >
+                                            <Trash2 size={18} />
+                                        </Button>
+                                    </AlertDialogTrigger>
 
                                 <AlertDialogContent>
                                     <AlertDialogHeader>
@@ -205,6 +225,7 @@ export default function CartPage() {
                                     </AlertDialogFooter>
                                 </AlertDialogContent>
                             </AlertDialog>
+                            </div>
                         </CardContent>
                     </Card>
                 ))}
@@ -218,6 +239,71 @@ export default function CartPage() {
                         </Button>
                     </div>
                 )}
+
+                {/* WISHLIST SECTION */}
+                <div className="mt-12">
+                    <h2 className="text-2xl font-bold mb-4 flex items-center gap-2">
+                        <Heart className="w-6 h-6 text-primary" />
+                        Saved for Later
+                    </h2>
+
+                    {wishlist.length === 0 ? (
+                        <p className="text-muted-foreground text-center flex flex-col items-center justify-center p-6 bg-card border rounded-xl shadow-sm">
+                            <Heart className="w-12 h-12 text-muted-foreground/50 mb-2" />
+                            No items saved for later.
+                        </p>
+                    ) : (
+                        <div className="space-y-4">
+                            {wishlist.map((item) => (
+                                <Card
+                                    key={item.id}
+                                    className="flex items-center justify-between bg-card border rounded-xl shadow-sm hover:shadow-md transition"
+                                >
+                                    <CardContent className="p-4 w-full flex items-center justify-between">
+                                        {/* LEFT: IMAGE + NAME */}
+                                        <div className="flex items-center gap-4">
+                                            <img
+                                                src={item.imgUrl}
+                                                alt={item.name}
+                                                className="w-16 h-16 object-contain rounded-md cursor-pointer"
+                                                onClick={() => navigate(`/product/${item.id}`)}
+                                            />
+
+                                            <div>
+                                                <h3 className="font-semibold text-lg text-card-foreground cursor-pointer" onClick={() => navigate(`/product/${item.id}`)}>
+                                                    {item.name}
+                                                </h3>
+                                                <p className="text-muted-foreground text-sm">
+                                                    ₹{item.price}
+                                                </p>
+                                            </div>
+                                        </div>
+
+                                        {/* RIGHT: MOVE TO CART & DELETE BUTTON */}
+                                        <div className="flex items-center gap-3">
+                                            <Button
+                                                variant="outline"
+                                                onClick={() => handleMoveToCart(item)}
+                                                className="text-primary bg-background hover:bg-muted font-semibold"
+                                            >
+                                                Move to Cart
+                                            </Button>
+
+                                            <Button
+                                                variant="destructive"
+                                                onClick={() => removeFromWishlist(item.id)}
+                                                className="text-destructive-foreground bg-destructive/90 hover:bg-destructive/80"
+                                                title="Remove from Wishlist"
+                                            >
+                                                <Trash2 size={18} />
+                                            </Button>
+                                        </div>
+                                    </CardContent>
+                                </Card>
+                            ))}
+                        </div>
+                    )}
+                </div>
             </div>
         </Layout>
     );

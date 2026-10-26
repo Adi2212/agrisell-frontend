@@ -11,6 +11,7 @@ export default function AccountDetails() {
 
   const [user, setUser] = useState(null);
   const [menu, setMenu] = useState([]);
+  const [imgError, setImgError] = useState(false);
 
   useEffect(() => {
     const storedUser = sessionStorage.getItem("user");
@@ -29,14 +30,16 @@ export default function AccountDetails() {
 
   }, [navigate]);
 
+  useEffect(() => {
+    setImgError(false);
+  }, [user?.profileUrl]);
+
   if (!user) return null;
 
   const { name, email, phone, role, accStatus, profileUrl } = user;
 
-  
   const handleLogout = () => {
     logout(); 
-    //navigate("/", { replace: true });
   };
 
   return (
@@ -47,14 +50,13 @@ export default function AccountDetails() {
           {/* Profile Header */}
           <div className="flex items-center gap-6 border-b pb-6">
             <div className="w-24 h-24 rounded-full overflow-hidden border bg-muted flex items-center justify-center">
-              {profileUrl ? (
+              {profileUrl && !imgError ? (
                 <img
-                  src={profileUrl + "?t=" + Date.now()}
+                  src={profileUrl}
                   alt="Profile"
+                  referrerPolicy="no-referrer"
                   className="w-full h-full object-cover"
-                  onError={(e) =>
-                    (e.currentTarget.src = "/default-avatar.png")
-                  }
+                  onError={() => setImgError(true)}
                 />
               ) : (
                 <User size={40} />

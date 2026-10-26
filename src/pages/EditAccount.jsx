@@ -24,10 +24,7 @@ export default function EditAccount() {
     return null;
   }
 
-  const [preview, setPreview] = useState(
-    user.profileUrl ? user.profileUrl + "?t=" + Date.now() : ""
-  );
-
+  const [preview, setPreview] = useState(user.profileUrl || "");
   const [loading, setLoading] = useState(false);
 
   const menu =
@@ -53,7 +50,7 @@ export default function EditAccount() {
       });
 
       updateUser(response.data);
-      setPreview(res.url + "?t=" + Date.now());
+      setPreview(res.url);
 
       toast.success("Profile photo updated successfully");
     } catch {
@@ -120,6 +117,7 @@ export default function EditAccount() {
                     <img
                       src={preview}
                       alt="Profile"
+                      referrerPolicy="no-referrer"
                       className="w-full h-full object-cover"
                     />
                   ) : (

@@ -4,10 +4,12 @@ import {
     Package,
     Tag,
     ShoppingCart,
+    BadgePercent,
 } from "lucide-react";
 
 export const adminMenu = [
     { label: "Dashboard", icon: HomeIcon, route: "/admin/dashboard" },
+    { label: "Sale Offers", icon: BadgePercent, route: "/admin/offers" },
     { label: "Manage Farmers", icon: Users, route: "/admin/farmers" },
     { label: "Manage Buyers", icon: Users, route: "/admin/buyers" },
     { label: "Products", icon: Package, route: "/admin/products" },

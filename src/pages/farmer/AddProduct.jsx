@@ -118,8 +118,24 @@ export default function AddProduct() {
 
       toast.success("Product Added Successfully");
       navigate("/farmer/products");
-    } catch {
-      toast.error("Failed to add product");
+
+    } catch (error) {
+      const data = error.response?.data;
+
+      if (data?.fields) {
+        // Display actual validation messages
+        Object.values(data.fields).forEach((message) => {
+          toast.error(message);
+        });
+      } else {
+        toast.error(
+          data?.message ||
+          data?.error ||
+          error.message ||
+          "Failed to add product"
+        );
+      }
+
     } finally {
       setLoading(false);
     }
